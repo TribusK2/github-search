@@ -12,8 +12,9 @@ export class ReposSearchComponent implements OnInit {
   constructor(private searchService: SearchService) { }
 
   ngOnInit(): void {
-    this.searchService.getUserRepos("angular-university").subscribe(console.log);
-    this.searchService.getRepoBranches("angular-university", "complete-typescript-course").subscribe(console.log);
+    // this.searchService.getUserRepos("angular-university").subscribe(console.log);
+    // this.searchService.getRepoBranches("angular-university", "complete-typescript-course").subscribe(console.log);
+    this.searchService.getUserReposList("TribusK2").subscribe(console.log);
   }
 
 }
