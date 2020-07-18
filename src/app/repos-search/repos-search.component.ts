@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
+import { SearchService } from '../services/search.service';
+
 @Component({
   selector: 'app-repos-search',
   templateUrl: './repos-search.component.html',
@@ -7,9 +9,11 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ReposSearchComponent implements OnInit {
 
-  constructor() { }
+  constructor(private searchService: SearchService) { }
 
   ngOnInit(): void {
+    this.searchService.getUserRepos("angular-university").subscribe(console.log);
+    this.searchService.getRepoBranches("angular-university", "complete-typescript-course").subscribe(console.log);
   }
 
 }
