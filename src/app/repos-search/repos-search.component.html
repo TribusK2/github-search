@@ -1,1 +1,8 @@
-<p>repos-search works!</p>
+<form [formGroup]="searchForm" (ngSubmit)="onSearch($event)">
+  <input type="text" formControlName="searchControl">
+  <button type="submit">Search</button>
+</form>
+
+<div *ngFor="let repo of (repos$ | async)">
+  <h5>{{repo.name}}</h5>
+</div>
