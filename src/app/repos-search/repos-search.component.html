@@ -4,5 +4,18 @@
 </form>
 
 <div *ngFor="let repo of (repos$ | async)">
-  <h5>{{repo.name}}</h5>
+  <div>
+    <h3>{{repo.owner.login}}:</h3>
+  </div>
+  <div>
+    <h3>{{repo.name}}</h3>
+  </div>
+  <div>
+    <ul *ngFor="let branch of repo.branches">
+      <li>
+        <h4>Branch: {{branch.name}}</h4>
+        <p>SHA: {{branch.commit.sha}}</p>
+      </li>
+    </ul>
+  </div>
 </div>

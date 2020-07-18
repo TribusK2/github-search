@@ -35,12 +35,16 @@ export class ReposSearchComponent implements OnInit {
   }
 
   onSearch(event: Event) {
-    event.preventDefault();
-    const userName = event.target[0].value;
+    if (this.searchForm.valid) {
+      event.preventDefault();
+      const userName = event.target[0].value;
 
 
-    console.log(userName);
-    this.repos$ = this.searchService.getPseudoData(userName);
+
+      console.log(userName);
+      this.repos$ = this.searchService.getPseudoData(userName);
+
+    }
   }
 
 }
