@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "ng": "ng",
+    "prod": "ng build --prod && cd dist && http-server -c-1 -P https://api.github.com .",
     "start": "ng serve",
     "build": "ng build",
     "test": "ng test",

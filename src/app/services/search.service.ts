@@ -1,7 +1,7 @@
 import { Injectable, isDevMode } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, of, throwError } from 'rxjs';
-import { concatMap, map, delay, catchError } from 'rxjs/operators';
+import { Observable, forkJoin, throwError, empty } from 'rxjs';
+import { concatMap, map, catchError } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 
 import { Repo } from '../repos-search/models/repo.model';
@@ -24,28 +24,40 @@ export class SearchService {
   getUserReposList(userName: string): Observable<Repo[]> {
     return this.getUserRepos(userName).pipe(
       concatMap(repos => {
-        const filteredRepos = repos.filter(repo => !repo.fork);
-        const getBranches$: Observable<Repo>[] = filteredRepos.map(repo => this.getRepoBranches(userName, repo.name).pipe(
-          map(res => {
-            repo.branches = res;
-            return repo;
-          })
-        ));
-        return forkJoin(...getBranches$);
+        if (repos.length) {
+          const filteredRepos = repos.filter(repo => !repo.fork);
+          const getBranches$: Observable<Repo>[] = filteredRepos.map(repo => this.getRepoBranches(userName, repo.name).pipe(
+            map(res => {
+              repo.branches = res;
+              return repo;
+            })
+          ));
+          return forkJoin(...getBranches$);
+        }
+        return throwError({
+          custom: true,
+          message: 'No repository for this user!',
+          status: 404
+        })
       }),
       catchError(err => {
-        if(isDevMode()){
+        if (isDevMode()) {
           console.log(err);
         }
 
         // Handle error message
         let errorMessage = "An unknow error occurred!";
         let errorType = "Unknow error!";
-        if (err && err.status === 403) {
+
+        if (err && err.custom) {
+          errorMessage = err.message;
+          errorType = `Error: ${err.status}!`;
+        }
+        if (err && err.status === 403 && !err.custom) {
           errorMessage = "API rate limit exceeded. Please wait 60 min or use VPN to send another request!";
           errorType = `Error: ${err.status}!`;
         }
-        if (err && err.status === 404) {
+        if (err && err.status === 404 && !err.custom) {
           errorMessage = "No such user was found!";
           errorType = `Error: ${err.status}!`;
         }
