@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, Validators, FormGroup } from '@angular/forms';
+import { tap, catchError } from 'rxjs/operators';
+import { Observable, throwError } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 import { SearchService } from '../services/search.service';
 import { Repo } from './models/repo.model';
-import { Observable, throwError } from 'rxjs';
-import { ToastrService } from 'ngx-toastr';
-import { tap, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-repos-search',
@@ -41,14 +41,16 @@ export class ReposSearchComponent implements OnInit {
    */
   onSearch(event: Event): void {
     if (this.searchForm.valid) {
-      // Get data form GitHub API
+      // Set up init value of function
       this.pending = true;
       this.isValid = true;
       event.preventDefault();
       const userName = event.target[0].value;
-      this.repos$ = this.searchService.getPseudoData(userName)
-      // this.repos$ = this.searchService.getUserReposList(userName)
+
+      // Get data form GitHub API
+      this.repos$ = this.searchService.getUserReposList(userName)
       .pipe(
+        // Turn of spinner
         tap(() => this.pending = false),
         catchError(err => {
           this.pending = false
@@ -56,12 +58,14 @@ export class ReposSearchComponent implements OnInit {
         })
       );
     } else {
-      // Set validation info
-      this.isValid = false;
+      // Turn of spinner
       this.pending = false;
+
+      // Display validation info
+      this.isValid = false;
       this.toastr.error('User name is required!', 'Validation error!', {
         positionClass: 'toast-bottom-center',
-        timeOut: 3000,
+        timeOut: 3000
       });
     }
   }
