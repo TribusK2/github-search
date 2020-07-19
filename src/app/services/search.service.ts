@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, of } from 'rxjs';
-import { concatMap, map, tap } from 'rxjs/operators';
+import { concatMap, map, tap, delay } from 'rxjs/operators';
 
 import { Repo } from '../repos-search/models/repo.model';
 import { Branch } from '../repos-search/models/branch.model';
@@ -82,7 +82,9 @@ export class SearchService {
   }
 
   getPseudoData(userName: string): Observable<Repo[]> {
-    return of(this.data)
+    return of(this.data).pipe(
+      delay(1000)
+    )
   }
 
 }

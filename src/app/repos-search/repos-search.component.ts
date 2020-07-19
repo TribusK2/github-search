@@ -41,9 +41,9 @@ export class ReposSearchComponent implements OnInit {
 
 
 
-      console.log(userName);
-      this.repos$ = this.searchService.getPseudoData(userName);
 
+      this.repos$ = this.searchService.getPseudoData(userName);
+      // this.repos$ = this.searchService.getUserReposList(userName);
     }
   }
 

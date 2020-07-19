@@ -1,31 +1,17 @@
+/* Importing Bootstrap SCSS file. */
+@import '~bootstrap/scss/bootstrap';
+
 /* You can add global styles to this file, and also import other style files */
-@import './scss/styles';
-
-html,
-body {
-  height: 100%;
-}
-
-body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
-}
+@import './scss/styles.scss';
 
 header {
   height: $header-height;
   background-color: $color-primary;
   color: $color-primary-invert;
-
-  h2 {
-    margin: 0;
-    padding: 8px;
-  }
 }
 
 main{
     height: calc(100vh - #{$header-height});
     color: $color-primary-text;
-    p{
-        margin: 0;
-    }
+    overflow-y: auto;
 }

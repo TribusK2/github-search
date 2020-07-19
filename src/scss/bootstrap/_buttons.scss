@@ -1,0 +1,15 @@
+.btn-dark {
+
+  &:not(:disabled):not(.disabled) {
+
+    &:active,
+    &:focus,
+    &.active {
+      box-shadow: 0 0 0 0.1rem rgba(82, 88, 93, 0.5);
+
+      &:focus {
+        box-shadow: 0 0 0 0.1rem rgba(82, 88, 93, 0.5);
+      }
+    }
+  }
+}

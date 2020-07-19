@@ -1,21 +1,29 @@
-<form [formGroup]="searchForm" (ngSubmit)="onSearch($event)">
-  <input type="text" formControlName="searchControl">
-  <button type="submit">Search</button>
-</form>
+<div class="bg-light shadow sticky-top">
+  <form [formGroup]="searchForm" (ngSubmit)="onSearch($event)">
+    <div class="input-group input-group-lg py-2 py-sm-4 py-md-5 col-12 col-sm-10 col-md-8 col-lg-8 col-xl-6 mx-auto">
+      <input type="text" formControlName="searchControl" class="form-control">
+      <div class="input-group-append">
+        <button type="submit" class="btn btn-dark">Search</button>
+      </div>
+    </div>
+  </form>
+</div>
 
-<div *ngFor="let repo of (repos$ | async)">
-  <div>
-    <h3>{{repo.owner.login}}:</h3>
-  </div>
-  <div>
-    <h3>{{repo.name}}</h3>
-  </div>
-  <div>
-    <ul *ngFor="let branch of repo.branches">
-      <li>
-        <h4>Branch: {{branch.name}}</h4>
-        <p>SHA: {{branch.commit.sha}}</p>
-      </li>
-    </ul>
+<div class="py-2 py-sm-4 py-md-5 bg-light">
+  <div *ngFor="let repo of (repos$ | async)">
+    <div class="col-12 col-sm-10 col-md-8 col-lg-8 col-xl-6 mx-auto">
+      <div class="card bg-light shadow mb-4">
+        <div class="card-header">Owner: {{repo.owner.login}}</div>
+        <div class="card-body">
+          <h4 class="card-title">Repo name: {{repo.name}}</h4>
+          <div *ngFor="let branch of repo.branches" class="card-text list-group">
+            <div class="list-group-item list-group-item-light">
+              <h5>Branch: {{branch.name}}</h5>
+              <p>SHA: {{branch.commit.sha}}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
