@@ -12,8 +12,9 @@ import { Observable } from 'rxjs';
 })
 export class ReposSearchComponent implements OnInit {
 
-  repos$: Observable<Repo[]>;
+  public repos$: Observable<Repo[]>;
   public searchForm: FormGroup;
+  public touched = false;
 
   constructor(
     private searchService: SearchService,
@@ -36,6 +37,7 @@ export class ReposSearchComponent implements OnInit {
 
   onSearch(event: Event) {
     if (this.searchForm.valid) {
+      this.touched = true;
       event.preventDefault();
       const userName = event.target[0].value;
 
