@@ -4,6 +4,7 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 import { SearchService } from '../services/search.service';
 import { Repo } from './models/repo.model';
 import { Observable } from 'rxjs';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-repos-search',
@@ -20,6 +21,7 @@ export class ReposSearchComponent implements OnInit {
   constructor(
     private searchService: SearchService,
     private _formBuilder: FormBuilder,
+    private toastr: ToastrService
   ) { }
 
   ngOnInit(): void {
@@ -52,6 +54,10 @@ export class ReposSearchComponent implements OnInit {
     }else{
       // Set validation info
       this.isValid = false;
+      this.toastr.error('User name is required!', 'Validation error!', {
+        positionClass: 'toast-bottom-center',
+        timeOut: 3000,
+      });
     }
   }
 

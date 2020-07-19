@@ -2,7 +2,7 @@
 <div class="bg-light shadow sticky-top">
   <form [formGroup]="searchForm" (ngSubmit)="onSearch($event)">
     <div class="input-group input-group-lg py-2 py-sm-4 py-md-5 col-12 col-sm-10 col-md-8 col-lg-8 col-xl-6 mx-auto">
-      <input type="text" formControlName="searchControl" class="form-control" [ngClass]="{'invalid-form': !isValid}" placeholder="Enter a GitHub user login">
+      <input type="text" formControlName="searchControl" class="form-control" [ngClass]="{'invalid-form': !isValid}" placeholder="Enter a GitHub user name">
       <div class="input-group-append">
         <button type="submit" class="btn btn-dark">Search</button>
       </div>
