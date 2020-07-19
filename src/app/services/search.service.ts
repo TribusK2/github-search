@@ -58,6 +58,11 @@ export class SearchService {
 
   constructor(private http: HttpClient) { }
 
+  /**
+   * Get all repos with branches details of GitHub user
+   * @param  {string} userName
+   * @returns Observable
+   */
   getUserReposList(userName: string): Observable<Repo[]> {
     return this.getUserRepos(userName).pipe(
       concatMap(repos => {
@@ -73,14 +78,27 @@ export class SearchService {
     )
   }
 
+  /**
+   * Get all repos of GitHub user
+   * @param  {string} userName
+   * @returns Observable
+   */
   getUserRepos(userName: string): Observable<Repo[]> {
     return this.http.get<Repo[]>(`${this.apiUrl}/users/${userName}/repos`);
   }
 
+  
+  /**
+   * Get all branches of GitHub repository
+   * @param  {string} userName
+   * @param  {string} repoName
+   * @returns Observable
+   */
   getRepoBranches(userName: string, repoName: string): Observable<Branch[]> {
     return this.http.get<Branch[]>(`${this.apiUrl}/repos/${userName}/${repoName}/branches`);
   }
 
+  
   getPseudoData(userName: string): Observable<Repo[]> {
     return of(this.data).pipe(
       delay(1000)
