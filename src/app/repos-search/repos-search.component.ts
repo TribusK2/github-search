@@ -3,8 +3,9 @@ import { FormBuilder, Validators, FormGroup } from '@angular/forms';
 
 import { SearchService } from '../services/search.service';
 import { Repo } from './models/repo.model';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { tap, catchError } from 'rxjs/operators';
 
 @Component({
   selector: 'app-repos-search',
@@ -15,8 +16,8 @@ export class ReposSearchComponent implements OnInit {
 
   public repos$: Observable<Repo[]>;
   public searchForm: FormGroup;
-  public touched = false;
   public isValid = true;
+  public pending = false;
 
   constructor(
     private searchService: SearchService,
@@ -31,10 +32,6 @@ export class ReposSearchComponent implements OnInit {
       searchControl: ['', Validators.required],
     })
 
-    // Get data from GitHub API and reder it on template
-    // this.searchService.getUserRepos("angular-university").subscribe(console.log);
-    // this.searchService.getRepoBranches("angular-university", "complete-typescript-course").subscribe(console.log);
-    // this.searchService.getUserReposList("TribusK2").subscribe(console.log);
   }
 
   /**
@@ -45,15 +42,23 @@ export class ReposSearchComponent implements OnInit {
   onSearch(event: Event): void {
     if (this.searchForm.valid) {
       // Get data form GitHub API
-      this.touched = true;
+      this.pending = true;
       this.isValid = true;
       event.preventDefault();
       const userName = event.target[0].value;
-      this.repos$ = this.searchService.getPseudoData(userName);
-      // this.repos$ = this.searchService.getUserReposList(userName);
-    }else{
+      this.repos$ = this.searchService.getPseudoData(userName)
+      // this.repos$ = this.searchService.getUserReposList(userName)
+      .pipe(
+        tap(() => this.pending = false),
+        catchError(err => {
+          this.pending = false
+          return throwError(err);
+        })
+      );
+    } else {
       // Set validation info
       this.isValid = false;
+      this.pending = false;
       this.toastr.error('User name is required!', 'Validation error!', {
         positionClass: 'toast-bottom-center',
         timeOut: 3000,

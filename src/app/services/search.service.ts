@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, forkJoin, of } from 'rxjs';
-import { concatMap, map, tap, delay } from 'rxjs/operators';
+import { Observable, forkJoin, of, throwError } from 'rxjs';
+import { concatMap, map, delay, catchError, repeat } from 'rxjs/operators';
+import { ToastrService } from 'ngx-toastr';
 
 import { Repo } from '../repos-search/models/repo.model';
 import { Branch } from '../repos-search/models/branch.model';
@@ -56,7 +57,7 @@ export class SearchService {
 
   private apiUrl = 'https://api.github.com';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private toastr: ToastrService) { }
 
   /**
    * Get all repos with branches details of GitHub user
@@ -74,6 +75,21 @@ export class SearchService {
           })
         ));
         return forkJoin(...getBranches$);
+      }),
+      catchError(err => {
+        let errorMessage = "An unknow error occurred!";
+        let errorType = "Unknow error!";
+        if (err && err.status === 403) {
+          errorMessage = err.statusText;
+          errorType = `Error ${err.status}!`;
+        }
+
+        if (err) {
+          this.toastr.error(errorMessage, errorType, {
+            positionClass: 'toast-bottom-center'
+          });
+        }
+        return throwError(err)
       })
     )
   }
@@ -87,7 +103,7 @@ export class SearchService {
     return this.http.get<Repo[]>(`${this.apiUrl}/users/${userName}/repos`);
   }
 
-  
+
   /**
    * Get all branches of GitHub repository
    * @param  {string} userName
@@ -98,11 +114,11 @@ export class SearchService {
     return this.http.get<Branch[]>(`${this.apiUrl}/repos/${userName}/${repoName}/branches`);
   }
 
-  
+
   getPseudoData(userName: string): Observable<Repo[]> {
     return of(this.data).pipe(
       delay(1000)
-    )
+    );
   }
 
 }
