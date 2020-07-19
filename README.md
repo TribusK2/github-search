@@ -14,7 +14,7 @@ Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app w
 
 Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
-## Run production mode on development server
+## Run production mode on development server (useful for PWA if will added)
 
 Run `npm install -g http-server` to install the simple development server.
 Inside project folder run `npm run prod` to run application in production mode on http-server.
